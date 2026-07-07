@@ -8,21 +8,13 @@ function read(relPath) {
   return fs.readFileSync(path.join(root, relPath), 'utf8').replace(/\r\n/g, '\n').trim();
 }
 
-function stripFrontmatter(text) {
-  return text.replace(/^---\n[\s\S]*?\n---\n*/, '').trim();
-}
-
 const agents = read('AGENTS.md');
 const canonical = agents.replace(/\n\n\(Yes, this file also applies[\s\S]*?\)$/, '').trim();
 
 // Compact copies: same body as AGENTS.md, host-specific frontmatter stripped.
 const copies = [
-  ['.cursor/rules/wall-e.mdc', stripFrontmatter],
-  ['.windsurf/rules/wall-e.md', text => text.trim()],
-  ['.clinerules/wall-e.md', text => text.trim()],
   ['.agents/rules/wall-e.md', text => text.trim()],
   ['.github/copilot-instructions.md', text => text.trim()],
-  ['.kiro/steering/wall-e.md', stripFrontmatter],
 ];
 
 let failed = false;
