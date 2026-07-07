@@ -223,7 +223,7 @@ On the command line, use a `$` prefix to explicitly activate a skill. For exampl
 clawhub install wall-e
 ```
 
-Installs wall-e as an OpenClaw skill from ClawHub; the review, audit, debt, gain, and help skills install the same way (`clawhub install wall-e-review`, and so on). OpenClaw applies it on coding tasks and also exposes it as a `/wall-e` command. Without ClawHub, copy [`.openclaw/skills/wall-e`](.openclaw/skills/) into `~/.openclaw/skills/`.
+Installs wall-e as an OpenClaw skill from ClawHub; the review, audit, debt, gain, help, and end-of-session skills install the same way (`clawhub install wall-e-review`, and so on). OpenClaw applies it on coding tasks and also exposes it as a `/wall-e` command. Without ClawHub, copy [`.openclaw/skills/wall-e`](.openclaw/skills/) into `~/.openclaw/skills/`.
 
 That was it. He'd be proud. He won't say it.
 
@@ -262,6 +262,7 @@ These remove the plugin's own files. They leave behind a small amount of state w
 | `/wall-e-debt` | Harvest the `wall-e:` shortcuts you've deferred into a ledger, so "later" doesn't become "never". |
 | `/wall-e-gain` | Show the measured impact scoreboard (less code, less cost, more speed) from the benchmark. |
 | `/wall-e-help` | Quick reference for the commands above. |
+| `/end-of-session` | Clean up the workspace before handoff or commit: inspect status, commit/stash, update `.gitignore`, scan for secrets, run checks. |
 
 Commands need a skill-capable host (Claude Code, Codex, OpenCode, Gemini, pi, Swival). In Codex they're skills, invoke with `@` (`@wall-e-review`). The instruction-only adapters (Cursor, Windsurf, Cline, Copilot, Kiro, Antigravity) load the always-on ruleset without the commands.
 
@@ -274,7 +275,7 @@ node scripts/check-rule-copies.js
 npm test
 ```
 
-The OpenClaw skill package (`.openclaw/skills/`) is generated from `skills/`; rerun `node scripts/build-openclaw-skills.js` after changing a skill, the test suite fails if it is stale. To publish the skills to ClawHub, run `clawhub login` once, then `node scripts/publish-openclaw-skills.js` (it publishes all six at the `package.json` version; pass `--dry-run` to preview).
+The OpenClaw skill package (`.openclaw/skills/`) is generated from `skills/`; rerun `node scripts/build-openclaw-skills.js` after changing a skill, the test suite fails if it is stale. To publish the skills to ClawHub, run `clawhub login` once, then `node scripts/publish-openclaw-skills.js` (it publishes all seven at the `package.json` version; pass `--dry-run` to preview).
 
 The correctness benchmark spawns Python for email and CSV checks; `python3` is tried before `python`. CSV checks need `pandas` installed locally.
 

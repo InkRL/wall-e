@@ -23,6 +23,7 @@ const DESCRIPTIONS = {
   'wall-e-debt': 'Harvest every wall-e: shortcut comment into one debt ledger, so deferrals get tracked instead of forgotten. One-shot report.',
   'wall-e-gain': 'Show wall-e measured impact as a scoreboard: less code, less cost, more speed, from the benchmark medians. One-shot display.',
   'wall-e-help': "Quick reference for wall-e's modes, skills, and commands. One-shot display.",
+  'end-of-session': 'Clean up a workspace before handoff or commit: inspect git status, commit or stash, update .gitignore, remove temp files, scan for secrets, run checks.',
 };
 
 const NAMES = Object.keys(DESCRIPTIONS);
