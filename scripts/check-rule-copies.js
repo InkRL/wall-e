@@ -14,6 +14,7 @@ const canonical = agents.replace(/\n\n\(Yes, this file also applies[\s\S]*?\)$/,
 // Compact copies: same body as AGENTS.md, host-specific frontmatter stripped.
 const copies = [
   ['.agents/rules/wall-e.md', text => text.trim()],
+  ['.devin/rules/wall-e.md', text => text.trim()],
   ['.github/copilot-instructions.md', text => text.trim()],
 ];
 

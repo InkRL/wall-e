@@ -1,14 +1,16 @@
 const fs = require('fs');
 const path = require('path');
-const { getClaudeDir } = require('./wall-e-config');
+const { getClaudeDir, getDevinDir } = require('./wall-e-config');
 
 const STATE_FILE = '.wall-e-active';
 const isCopilot = Boolean(process.env.COPILOT_PLUGIN_DATA);
 const isCodex = !isCopilot && Boolean(process.env.PLUGIN_DATA);
+const isDevin = !isCopilot && !isCodex && Boolean(process.env.DEVIN_PROJECT_DIR);
 
 let stateDir = getClaudeDir();
 if (isCodex) stateDir = process.env.PLUGIN_DATA;
 if (isCopilot) stateDir = process.env.COPILOT_PLUGIN_DATA;
+if (isDevin) stateDir = getDevinDir();
 
 const statePath = path.join(stateDir, STATE_FILE);
 
@@ -48,6 +50,15 @@ function writeHookOutput(event, mode, context = '') {
     process.stdout.write(JSON.stringify(output));
     return;
   }
+  if (isDevin) {
+    // Devin CLI's docs only show the hookSpecificOutput wrapper for SessionStart
+    // and UserPromptSubmit — unlike native Claude, it doesn't document raw stdout
+    // as additionalContext, so wrap it explicitly (and stay silent when off).
+    process.stdout.write(context
+      ? JSON.stringify({ hookSpecificOutput: { hookEventName: event, additionalContext: context } })
+      : '');
+    return;
+  }
   // Native Claude: SessionStart accepts raw stdout, but SubagentStart needs the
   // hookSpecificOutput JSON form or the context is dropped.
   if (event === 'SubagentStart') {
@@ -62,6 +73,7 @@ module.exports = {
   clearMode,
   isCodex,
   isCopilot,
+  isDevin,
   readMode,
   setMode,
   writeHookOutput,

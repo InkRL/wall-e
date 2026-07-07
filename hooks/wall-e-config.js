@@ -73,6 +73,18 @@ function getClaudeDir() {
   return process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
 }
 
+function getDevinDir() {
+  // wall-e: mirrors Devin CLI's own (fixed, non-XDG-configurable) config dir
+  // so the mode flag lives next to Devin's other per-user state.
+  if (process.platform === 'win32') {
+    return path.join(
+      process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'),
+      'devin'
+    );
+  }
+  return path.join(os.homedir(), '.config', 'devin');
+}
+
 function getDefaultMode() {
   // 1. Environment variable (highest priority)
   const envMode = process.env.WALLE_DEFAULT_MODE;
@@ -113,6 +125,7 @@ module.exports = {
   getConfigDir,
   getConfigPath,
   getClaudeDir,
+  getDevinDir,
   isShellSafe,
   normalizeMode,
   normalizeConfigMode,

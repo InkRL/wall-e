@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/github/stars/DietrichGebert/ponytail?style=flat-square&color=111111&label=stars" alt="Stars">
   <img src="https://img.shields.io/github/v/release/DietrichGebert/ponytail?style=flat-square&color=111111&label=release" alt="Release">
   <img src="https://img.shields.io/npm/v/@dietrichgebert/ponytail?style=flat-square&color=111111&label=npm" alt="npm">
-  <img src="https://img.shields.io/badge/works%20with-14%20agents-111111?style=flat-square" alt="Works with 14 agents">
+  <img src="https://img.shields.io/badge/works%20with-15%20agents-111111?style=flat-square" alt="Works with 15 agents">
   <img src="https://img.shields.io/badge/license-MIT-111111?style=flat-square" alt="MIT license">
 </p>
 
@@ -109,7 +109,7 @@ Lazy, not negligent: trust-boundary validation, data-loss handling, security, an
 
 The most effort wall-e will ever ask of you:
 
-The Claude Code and Codex plugins run two tiny Node.js lifecycle hooks, so `node` needs to be on your PATH (note for Nix/nvm users: it must be on the non-interactive shell's PATH). If it isn't, the skills still work, the always-on activation just stays quiet instead of erroring on every prompt.
+The Claude Code and Codex plugins, and Devin CLI's `.devin/hooks.v1.json`, run two tiny Node.js lifecycle hooks, so `node` needs to be on your PATH (note for Nix/nvm users: it must be on the non-interactive shell's PATH). If it isn't, the skills still work, the always-on activation just stays quiet instead of erroring on every prompt.
 
 ### Claude Code
 
@@ -199,6 +199,12 @@ agy plugin install https://github.com/DietrichGebert/ponytail
 
 It reuses this repo's `gemini-extension.json`. One difference: Antigravity converts the `/wall-e` commands into skills, so you type them into the chat (e.g. `/wall-e-review` as a message) instead of picking them from a slash menu. Until the migration completes (around June 18, 2026), `gemini extensions install` still works too. To run it as an always-on rule instead, drop the ruleset into `.agents/rules/`.
 
+### Devin CLI
+
+Reads [`AGENTS.md`](AGENTS.md) from the project root automatically, zero setup.
+
+Running from a checkout of this repo also picks up [`.devin/hooks.v1.json`](.devin/hooks.v1.json), which reuses the same `hooks/` scripts as Claude Code and Codex (Devin's hook format is Claude Code-compatible): session-start ruleset injection at the active level, plus mode tracking on every prompt — use `@wall-e lite|full|ultra|off` (the `@` prefix sidesteps Devin's own slash-command handling, since `/wall-e` isn't a command Devin knows about here). Devin CLI's plugin system currently only bundles skills, not hooks, so outside a checkout you get the `AGENTS.md` rule without the mode switches.
+
 ### CodeWhale
 
 Reads `AGENTS.md` from the project root, zero setup. Copy [`AGENTS.md`](AGENTS.md) to your project, or run `codewhale` from a checkout of this repo. That's it.
@@ -264,7 +270,7 @@ These remove the plugin's own files. They leave behind a small amount of state w
 | `/wall-e-help` | Quick reference for the commands above. |
 | `/end-of-session` | Clean up the workspace before handoff or commit: inspect status, commit/stash, update `.gitignore`, scan for secrets, run checks. |
 
-Commands need a skill-capable host (Claude Code, Codex, OpenCode, Gemini, pi, Swival). In Codex they're skills, invoke with `@` (`@wall-e-review`). The instruction-only adapters (Cursor, Windsurf, Cline, Copilot, Kiro, Antigravity) load the always-on ruleset without the commands.
+Commands need a skill-capable host (Claude Code, Codex, OpenCode, Gemini, pi, Swival). In Codex they're skills, invoke with `@` (`@wall-e-review`). The instruction-only adapters (Cursor, Windsurf, Cline, Copilot, Kiro, Antigravity) load the always-on ruleset without the commands. Devin CLI (checkout only) tracks the `/wall-e` level switch via `.devin/hooks.v1.json` but has no skill-based commands.
 
 ## Development
 

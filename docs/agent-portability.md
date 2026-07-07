@@ -13,6 +13,7 @@ to load in a given agent.
 | OpenCode | `.opencode/plugins/wall-e.mjs`, `.opencode/command/`, `hooks/`, `skills/` | Server plugin injects the ruleset each turn via `experimental.chat.system.transform` and persists `/wall-e` switches; reuses the shared instruction builder. |
 | pi | `pi-extension/`, `skills/`, `hooks/` | Package extension: injects the ruleset each turn through the shared instruction builder and registers the `/wall-e` commands. |
 | Gemini CLI | `gemini-extension.json`, `AGENTS.md`, `commands/`, `skills/` | Extension manifest points `contextFileName` at `AGENTS.md` for always-on rules, and reuses the existing `commands/*.toml` and `skills/`, which Gemini CLI auto-discovers. The Claude/Codex hook map is not placed at Gemini's auto-discovered `hooks/hooks.json` path. |
+| Devin CLI | `AGENTS.md`, `.devin/hooks.v1.json`, `hooks/` | Reads `AGENTS.md` at the repo root as always-on rules, zero setup. Running from a checkout of this repo also loads `.devin/hooks.v1.json` (Devin's hooks format is Claude Code-compatible), which reuses the same `hooks/` scripts for SessionStart ruleset injection and `/wall-e` mode tracking on UserPromptSubmit. Devin CLI has no SubagentStart event and no statusline concept, and its plugin system only bundles skills (not hooks), so this hooks tier only applies inside a checkout. |
 | Cursor | `.cursor/rules/wall-e.mdc` | Always-on project rule. |
 | Windsurf | `.windsurf/rules/wall-e.md` | Project rule. |
 | Cline | `.clinerules/wall-e.md` | Project rule. |

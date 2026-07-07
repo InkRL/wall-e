@@ -14,6 +14,7 @@ const {
   clearMode,
   isCodex,
   isCopilot,
+  isDevin,
   setMode,
   writeHookOutput,
 } = require('./wall-e-runtime');
@@ -26,7 +27,7 @@ const mode = getDefaultMode();
 // "off" mode — skip activation entirely, don't write flag or emit rules
 if (mode === 'off') {
   clearMode();
-  const hookOutput = (isCodex || isCopilot) ? '' : 'OK';
+  const hookOutput = (isCodex || isCopilot || isDevin) ? '' : 'OK';
   writeHookOutput('SessionStart', 'off', hookOutput);
   process.exit(0);
 }
@@ -42,7 +43,7 @@ try {
 let output = getWallEInstructions(mode);
 
 // 3. Detect missing statusline config — nudge Claude to help set it up
-if (!isCodex && !isCopilot) try {
+if (!isCodex && !isCopilot && !isDevin) try {
   let hasStatusline = false;
   if (fs.existsSync(settingsPath)) {
     // Strip UTF-8 BOM some editors prepend on Windows (breaks JSON.parse)
