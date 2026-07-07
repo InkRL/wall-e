@@ -1,0 +1,5 @@
+---
+description: Quick reference for wall-e levels, skills, and commands
+---
+
+Show the wall-e quick reference. One shot, change nothing: do not switch mode, write flag files, or persist anything. Levels: /wall-e lite (build what's asked, name the lazier alternative in one line), /wall-e (full, the default ladder: YAGNI then stdlib then native then one line then minimum), /wall-e ultra (deletion before addition, challenges the requirement before building). Commands: /wall-e-review (over-engineering review of the current changes), /wall-e-audit (whole-repo over-engineering audit), /wall-e-debt (harvest wall-e: comments into a tracked ledger), /wall-e-help (this card). Deactivate with 'stop wall-e', 'normal mode', or /wall-e off; resume anytime with /wall-e. Default mode is full; change it with the WALLE_DEFAULT_MODE environment variable (off|lite|full|ultra) or a config file at ~/.config/wall-e/config.json (Windows: %APPDATA%\wall-e\config.json) with {"defaultMode": "lite"}. Resolution order: env var, then config file, then full.

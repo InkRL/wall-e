@@ -11,9 +11,9 @@ const root = path.join(__dirname, '..');
 // isShellSafe gates the statusline setup snippet (issue #200): ordinary install
 // paths pass, paths carrying shell metacharacters are rejected so they never get
 // embedded in a shell command.
-const { isShellSafe } = require('../hooks/ponytail-config');
-assert.equal(isShellSafe('C:\\Users\\x\\.claude\\plugins\\ponytail\\hooks\\ponytail-statusline.ps1'), true);
-assert.equal(isShellSafe('/home/u/.claude/plugins/ponytail/hooks/ponytail-statusline.sh'), true);
+const { isShellSafe } = require('../hooks/wall-e-config');
+assert.equal(isShellSafe('C:\\Users\\x\\.claude\\plugins\\wall-e\\hooks\\wall-e-statusline.ps1'), true);
+assert.equal(isShellSafe('/home/u/.claude/plugins/wall-e/hooks/wall-e-statusline.sh'), true);
 assert.equal(isShellSafe('/tmp/a"&calc.exe&"/x.sh'), false);
 assert.equal(isShellSafe('/tmp/$(calc)/x.sh'), false);
 assert.equal(isShellSafe('/tmp/a;rm -rf/x.sh'), false);
@@ -35,7 +35,7 @@ delete process.env.CLAUDE_CONFIG_DIR;
 delete process.env.PLUGIN_DATA;
 delete process.env.COPILOT_PLUGIN_DATA;
 
-const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'ponytail-hooks-'));
+const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'wall-e-hooks-'));
 // Runs on normal exit and on assertion-throw exit; force makes it idempotent.
 process.on('exit', () => fs.rmSync(temp, { recursive: true, force: true }));
 
@@ -48,47 +48,47 @@ const codexEnv = {
   HOME: home,
   USERPROFILE: home,
   PLUGIN_DATA: pluginData,
-  PONYTAIL_DEFAULT_MODE: 'ultra',
+  WALLE_DEFAULT_MODE: 'ultra',
 };
-const codexState = path.join(pluginData, '.ponytail-active');
+const codexState = path.join(pluginData, '.wall-e-active');
 
-let result = run('ponytail-activate.js', codexEnv);
+let result = run('wall-e-activate.js', codexEnv);
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(codexState, 'utf8'), 'ultra');
 let output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:ULTRA');
+assert.equal(output.systemMessage, 'WALL-E:ULTRA');
 assert.match(
   output.hookSpecificOutput.additionalContext,
-  /PONYTAIL MODE ACTIVE — level: ultra/,
+  /WALL-E MODE ACTIVE — level: ultra/,
 );
 
 result = run(
-  'ponytail-mode-tracker.js',
+  'wall-e-mode-tracker.js',
   codexEnv,
-  JSON.stringify({ prompt: '@ponytail lite' }),
+  JSON.stringify({ prompt: '@wall-e lite' }),
 );
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite');
 output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:LITE');
+assert.equal(output.systemMessage, 'WALL-E:LITE');
 
 result = run(
-  'ponytail-mode-tracker.js',
+  'wall-e-mode-tracker.js',
   codexEnv,
   JSON.stringify({ prompt: 'normal mode' }),
 );
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.existsSync(codexState), false);
 output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:OFF');
+assert.equal(output.systemMessage, 'WALL-E:OFF');
 
-// A request that merely mentions "normal mode" must not deactivate ponytail.
-result = run('ponytail-mode-tracker.js', codexEnv, JSON.stringify({ prompt: '@ponytail lite' }));
+// A request that merely mentions "normal mode" must not deactivate wall-e.
+result = run('wall-e-mode-tracker.js', codexEnv, JSON.stringify({ prompt: '@wall-e lite' }));
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite');
 
 result = run(
-  'ponytail-mode-tracker.js',
+  'wall-e-mode-tracker.js',
   codexEnv,
   JSON.stringify({ prompt: 'add a normal mode toggle next to dark mode' }),
 );
@@ -96,20 +96,20 @@ assert.equal(result.status, 0, result.stderr);
 assert.equal(
   fs.readFileSync(codexState, 'utf8'),
   'lite',
-  'incidental "normal mode" in a request must not turn ponytail off',
+  'incidental "normal mode" in a request must not turn wall-e off',
 );
 
 const claudeEnv = {
   HOME: home,
   USERPROFILE: home,
-  PONYTAIL_DEFAULT_MODE: 'full',
+  WALLE_DEFAULT_MODE: 'full',
 };
 delete claudeEnv.PLUGIN_DATA;
 
-result = run('ponytail-activate.js', claudeEnv);
+result = run('wall-e-activate.js', claudeEnv);
 assert.equal(result.status, 0, result.stderr);
 assert.equal(
-  fs.readFileSync(path.join(home, '.claude', '.ponytail-active'), 'utf8'),
+  fs.readFileSync(path.join(home, '.claude', '.wall-e-active'), 'utf8'),
   'full',
 );
 
@@ -117,96 +117,96 @@ assert.equal(
 const home2 = path.join(temp, 'home2');
 fs.mkdirSync(home2, { recursive: true });
 const customConfigDir = path.join(temp, 'custom-claude');
-result = run('ponytail-activate.js', {
+result = run('wall-e-activate.js', {
   HOME: home2,
   USERPROFILE: home2,
   CLAUDE_CONFIG_DIR: customConfigDir,
-  PONYTAIL_DEFAULT_MODE: 'lite',
+  WALLE_DEFAULT_MODE: 'lite',
 });
 assert.equal(result.status, 0, result.stderr);
 assert.equal(
-  fs.readFileSync(path.join(customConfigDir, '.ponytail-active'), 'utf8'),
+  fs.readFileSync(path.join(customConfigDir, '.wall-e-active'), 'utf8'),
   'lite',
 );
 assert.equal(
-  fs.existsSync(path.join(home2, '.claude', '.ponytail-active')),
+  fs.existsSync(path.join(home2, '.claude', '.wall-e-active')),
   false,
   'flag must not land in ~/.claude when CLAUDE_CONFIG_DIR is set',
 );
 
 const copilotData = path.join(temp, 'copilot-data');
 const codexData = path.join(temp, 'codex-data-shadow');
-result = run('ponytail-activate.js', {
+result = run('wall-e-activate.js', {
   HOME: home,
   USERPROFILE: home,
   COPILOT_PLUGIN_DATA: copilotData,
   PLUGIN_DATA: codexData,
-  PONYTAIL_DEFAULT_MODE: 'full',
+  WALLE_DEFAULT_MODE: 'full',
 });
 assert.equal(result.status, 0, result.stderr);
-assert.equal(fs.readFileSync(path.join(copilotData, '.ponytail-active'), 'utf8'), 'full');
+assert.equal(fs.readFileSync(path.join(copilotData, '.wall-e-active'), 'utf8'), 'full');
 assert.equal(
-  fs.existsSync(path.join(codexData, '.ponytail-active')),
+  fs.existsSync(path.join(codexData, '.wall-e-active')),
   false,
   'copilot hooks must not write mode state to codex PLUGIN_DATA',
 );
 output = JSON.parse(result.stdout);
-assert.match(output.additionalContext, /PONYTAIL MODE ACTIVE — level: full/);
+assert.match(output.additionalContext, /WALL-E MODE ACTIVE — level: full/);
 
 result = run(
-  'ponytail-mode-tracker.js',
+  'wall-e-mode-tracker.js',
   {
     HOME: home,
     USERPROFILE: home,
     COPILOT_PLUGIN_DATA: copilotData,
     PLUGIN_DATA: codexData,
   },
-  JSON.stringify({ prompt: '/ponytail ultra' }),
+  JSON.stringify({ prompt: '/wall-e ultra' }),
 );
 assert.equal(result.status, 0, result.stderr);
-assert.equal(fs.readFileSync(path.join(copilotData, '.ponytail-active'), 'utf8'), 'ultra');
+assert.equal(fs.readFileSync(path.join(copilotData, '.wall-e-active'), 'utf8'), 'ultra');
 assert.equal(
-  fs.existsSync(path.join(codexData, '.ponytail-active')),
+  fs.existsSync(path.join(codexData, '.wall-e-active')),
   false,
   'copilot mode tracker must keep codex PLUGIN_DATA untouched',
 );
 output = JSON.parse(result.stdout);
 assert.deepEqual(output, {});
 
-// SubagentStart hook: when ponytail mode is active it injects the ruleset into
+// SubagentStart hook: when wall-e mode is active it injects the ruleset into
 // each subagent (issue #252). Native Claude must get the hookSpecificOutput JSON
 // form, not raw stdout, or the context is dropped.
 const subHome = path.join(temp, 'sub-home');
-const subFlag = path.join(subHome, '.claude', '.ponytail-active');
+const subFlag = path.join(subHome, '.claude', '.wall-e-active');
 fs.mkdirSync(path.dirname(subFlag), { recursive: true });
 const subEnv = { HOME: subHome, USERPROFILE: subHome };
 
 fs.writeFileSync(subFlag, 'full');
-result = run('ponytail-subagent.js', subEnv);
+result = run('wall-e-subagent.js', subEnv);
 assert.equal(result.status, 0, result.stderr);
 output = JSON.parse(result.stdout);
 assert.equal(output.hookSpecificOutput.hookEventName, 'SubagentStart');
 assert.match(
   output.hookSpecificOutput.additionalContext,
-  /PONYTAIL MODE ACTIVE — level: full/,
+  /WALL-E MODE ACTIVE — level: full/,
 );
 
-// No flag → ponytail off → inject nothing (empty stdout, no failure).
+// No flag → wall-e off → inject nothing (empty stdout, no failure).
 fs.unlinkSync(subFlag);
-result = run('ponytail-subagent.js', subEnv);
+result = run('wall-e-subagent.js', subEnv);
 assert.equal(result.status, 0, result.stderr);
-assert.equal(result.stdout, '', 'SubagentStart must stay silent when ponytail is off');
+assert.equal(result.stdout, '', 'SubagentStart must stay silent when wall-e is off');
 
 // Codex shares claude-codex-hooks.json, so SubagentStart is reachable under Codex
 // too — assert the codex branch emits the badge plus hookSpecificOutput.
 const subCodex = path.join(temp, 'sub-codex');
 fs.mkdirSync(subCodex, { recursive: true });
-fs.writeFileSync(path.join(subCodex, '.ponytail-active'), 'full');
-result = run('ponytail-subagent.js', { HOME: subHome, USERPROFILE: subHome, PLUGIN_DATA: subCodex });
+fs.writeFileSync(path.join(subCodex, '.wall-e-active'), 'full');
+result = run('wall-e-subagent.js', { HOME: subHome, USERPROFILE: subHome, PLUGIN_DATA: subCodex });
 assert.equal(result.status, 0, result.stderr);
 output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:FULL');
+assert.equal(output.systemMessage, 'WALL-E:FULL');
 assert.equal(output.hookSpecificOutput.hookEventName, 'SubagentStart');
-assert.match(output.hookSpecificOutput.additionalContext, /PONYTAIL MODE ACTIVE — level: full/);
+assert.match(output.hookSpecificOutput.additionalContext, /WALL-E MODE ACTIVE — level: full/);
 
 console.log('hook compatibility checks passed');

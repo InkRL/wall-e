@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import ponytailExtension from "../index.js";
+import walleExtension from "../index.js";
 
 function createPiHarness() {
   const events = new Map();
@@ -27,7 +27,7 @@ function createPiHarness() {
     },
   };
 
-  ponytailExtension(pi);
+  walleExtension(pi);
   return { events, commands, appendedEntries, sentUserMessages };
 }
 
@@ -41,7 +41,7 @@ function createCommandContext(overrides = {}) {
 }
 
 function withTempConfig(fn) {
-  const tempConfigHome = mkdtempSync(join(tmpdir(), "ponytail-test-"));
+  const tempConfigHome = mkdtempSync(join(tmpdir(), "wall-e-test-"));
   const previousXdg = process.env.XDG_CONFIG_HOME;
   process.env.XDG_CONFIG_HOME = tempConfigHome;
 
@@ -54,26 +54,26 @@ function withTempConfig(fn) {
     });
 }
 
-test("extension registers Ponytail commands", () => {
+test("extension registers Wall-E commands", () => {
   const { commands } = createPiHarness();
 
-  assert.deepEqual([...commands.keys()].sort(), ["ponytail", "ponytail-audit", "ponytail-debt", "ponytail-gain", "ponytail-help", "ponytail-review"]);
+  assert.deepEqual([...commands.keys()].sort(), ["wall-e", "wall-e-audit", "wall-e-debt", "wall-e-gain", "wall-e-help", "wall-e-review"]);
 });
 
-test("/ponytail updates session mode and injects instructions", async () => withTempConfig(async () => {
+test("/wall-e updates session mode and injects instructions", async () => withTempConfig(async () => {
   const { commands, events, appendedEntries } = createPiHarness();
   const ctx = createCommandContext();
 
   await events.get("session_start")({ reason: "startup" }, ctx);
-  await commands.get("ponytail").handler("ultra", ctx);
+  await commands.get("wall-e").handler("ultra", ctx);
 
   assert.deepEqual(appendedEntries.at(-1), {
-    customType: "ponytail-mode",
+    customType: "wall-e-mode",
     data: { mode: "ultra" },
   });
 
   const result = await events.get("before_agent_start")({ systemPrompt: "BASE" }, ctx);
-  assert.ok(result.systemPrompt.includes("PONYTAIL MODE ACTIVE"));
+  assert.ok(result.systemPrompt.includes("WALL-E MODE ACTIVE"));
   assert.ok(result.systemPrompt.includes("ultra"));
 }));
 
@@ -82,7 +82,7 @@ test("session_start restores latest persisted mode", async () => withTempConfig(
   const ctx = createCommandContext({
     sessionManager: {
       getEntries: () => [
-        { type: "custom", customType: "ponytail-mode", data: { mode: "lite" } },
+        { type: "custom", customType: "wall-e-mode", data: { mode: "lite" } },
       ],
     },
   });
@@ -97,18 +97,18 @@ test("skill alias commands delegate to Pi skill commands", async () => {
   const { commands, sentUserMessages } = createPiHarness();
   const ctx = createCommandContext();
 
-  await commands.get("ponytail-review").handler("", ctx);
-  await commands.get("ponytail-audit").handler("", ctx);
-  await commands.get("ponytail-debt").handler("", ctx);
-  await commands.get("ponytail-gain").handler("", ctx);
-  await commands.get("ponytail-help").handler("", ctx);
+  await commands.get("wall-e-review").handler("", ctx);
+  await commands.get("wall-e-audit").handler("", ctx);
+  await commands.get("wall-e-debt").handler("", ctx);
+  await commands.get("wall-e-gain").handler("", ctx);
+  await commands.get("wall-e-help").handler("", ctx);
 
   assert.deepEqual(sentUserMessages.map((entry) => entry.text), [
-    "/skill:ponytail-review",
-    "/skill:ponytail-audit",
-    "/skill:ponytail-debt",
-    "/skill:ponytail-gain",
-    "/skill:ponytail-help",
+    "/skill:wall-e-review",
+    "/skill:wall-e-audit",
+    "/skill:wall-e-debt",
+    "/skill:wall-e-gain",
+    "/skill:wall-e-help",
   ]);
 });
 
@@ -117,7 +117,7 @@ test("normal mode disables persistent instructions", async () => withTempConfig(
   const ctx = createCommandContext();
 
   await events.get("session_start")({ reason: "startup" }, ctx);
-  await commands.get("ponytail").handler("ultra", ctx);
+  await commands.get("wall-e").handler("ultra", ctx);
   await events.get("input")({ text: "normal mode", source: "interactive" }, ctx);
 
   const disabled = await events.get("before_agent_start")({ systemPrompt: "BASE" }, ctx);
@@ -129,25 +129,25 @@ test("a request mentioning normal mode stays active", async () => withTempConfig
   const ctx = createCommandContext();
 
   await events.get("session_start")({ reason: "startup" }, ctx);
-  await commands.get("ponytail").handler("ultra", ctx);
+  await commands.get("wall-e").handler("ultra", ctx);
   await events.get("input")({ text: "add a normal mode toggle next to dark mode", source: "interactive" }, ctx);
 
   const result = await events.get("before_agent_start")({ systemPrompt: "BASE" }, ctx);
-  assert.match(result.systemPrompt, /PONYTAIL MODE ACTIVE/);
+  assert.match(result.systemPrompt, /WALL-E MODE ACTIVE/);
 }));
 
 test("status bar renders the mode and flips active on agent_start", async () => withTempConfig(async () => {
   const { events } = createPiHarness();
   const statusWrites = [];
   const ctx = createCommandContext({
-    sessionManager: { getEntries: () => [{ type: "custom", customType: "ponytail-mode", data: { mode: "ultra" } }] },
+    sessionManager: { getEntries: () => [{ type: "custom", customType: "wall-e-mode", data: { mode: "ultra" } }] },
     ui: { notify() {}, setStatus: (key, text) => statusWrites.push({ key, text }), theme: { fg: (_color, text) => text } },
   });
 
   await events.get("session_start")({ reason: "resume" }, ctx);
   await events.get("agent_start")({}, ctx);
 
-  assert.equal(statusWrites.at(-2).key, "ponytail");
+  assert.equal(statusWrites.at(-2).key, "wall-e");
   assert.match(statusWrites.at(-2).text, /○.*ULTRA/);
   assert.match(statusWrites.at(-1).text, /●.*ULTRA/);
 }));
@@ -156,7 +156,7 @@ test("status bar stays silent when ui lacks a theme", async () => withTempConfig
   const { events } = createPiHarness();
   const calls = [];
   const ctx = createCommandContext({
-    sessionManager: { getEntries: () => [{ type: "custom", customType: "ponytail-mode", data: { mode: "ultra" } }] },
+    sessionManager: { getEntries: () => [{ type: "custom", customType: "wall-e-mode", data: { mode: "ultra" } }] },
     ui: { notify() {}, setStatus: (_key, text) => calls.push(text) }, // setStatus present, theme absent
   });
 

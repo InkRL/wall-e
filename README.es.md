@@ -1,11 +1,11 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.png">
-    <img src="assets/logo.png" width="220" alt="Ponytail, el senior dev flojo">
+    <img src="assets/logo.png" width="220" alt="Wall-E, el senior dev flojo">
   </picture>
 </p>
 
-<h1 align="center">Ponytail</h1>
+<h1 align="center">Wall-E</h1>
 
 <p align="center">
   <em>No dice nada. Escribe una línea. Funciona.</em>
@@ -26,7 +26,7 @@
 
 <p align="center">
   <strong>~54% menos código (hasta 94%) &middot; ~20% más barato &middot; ~27% más rápido &middot; 100% seguro</strong><br>
-  <sub>Medido en sesiones reales de Claude Code editando un repo open-source real (FastAPI + React), contra el mismo agente sin skill. ~54% es el promedio de 12 tareas de feature (Haiku 4.5, n=4); llega al 94% cuando un agente sobre-construye (un selector de fechas) y es casi cero cuando el código ya es mínimo. ponytail mantiene cada guarda de seguridad, mientras que un prompt pelado de "escribe one-liners" se salta una. (El benchmark anterior de un solo disparo reportaba 80-94% como cifra plana; contra un baseline agéntico justo, ese es el techo por tarea, no el promedio.) <a href="benchmarks/results/2026-06-18-agentic.md">Reporte completo</a> &middot; <a href="benchmarks/">reprodúcelo</a>.</sub>
+  <sub>Medido en sesiones reales de Claude Code editando un repo open-source real (FastAPI + React), contra el mismo agente sin skill. ~54% es el promedio de 12 tareas de feature (Haiku 4.5, n=4); llega al 94% cuando un agente sobre-construye (un selector de fechas) y es casi cero cuando el código ya es mínimo. wall-e mantiene cada guarda de seguridad, mientras que un prompt pelado de "escribe one-liners" se salta una. (El benchmark anterior de un solo disparo reportaba 80-94% como cifra plana; contra un baseline agéntico justo, ese es el techo por tarea, no el promedio.) <a href="benchmarks/results/2026-06-18-agentic.md">Reporte completo</a> &middot; <a href="benchmarks/">reprodúcelo</a>.</sub>
 </p>
 
 <p align="center">
@@ -37,16 +37,16 @@
 
 Lo conoces. Cola de caballo larga. Lentes ovalados. Lleva más tiempo en la empresa que el control de versiones. Le muestras cincuenta líneas; las mira, no dice nada, y las reemplaza por una.
 
-Ponytail lo pone dentro de tu agente de IA.
+Wall-E lo pone dentro de tu agente de IA.
 
 ## Antes / después
 
 Le pides un selector de fechas. Tu agente instala flatpickr, escribe un componente wrapper, agrega un stylesheet, y empieza una discusión sobre zonas horarias.
 
-Con ponytail:
+Con wall-e:
 
 ```html
-<!-- ponytail: el browser ya tiene uno -->
+<!-- wall-e: el browser ya tiene uno -->
 <input type="date">
 ```
 
@@ -57,21 +57,21 @@ Más sobrevivientes en [examples/](examples/).
 La medición honesta es un agente real haciendo trabajo real: una sesión headless de Claude Code editando [el template full-stack-fastapi de tiangolo](https://github.com/fastapi/full-stack-fastapi-template) (un repo real de FastAPI + React), evaluada sobre el `git diff` que deja. Doce tickets de feature, el mismo agente con y sin el skill, n=4, Haiku 4.5.
 
 <p align="center">
-  <img src="assets/benchmark-agentic.svg" width="860" alt="Cada variante como porcentaje del baseline sin skill en LOC, tokens, costo y tiempo (Haiku 4.5). ponytail es el más bajo en cada métrica (LOC 46%, tokens 78%, costo 80%, tiempo 73%); caveman sube por encima del 100% en tokens, costo y tiempo; yagni-oneliner LOC 67%. Seguridad, tier adversarial aparte: baseline, caveman y ponytail 100%, yagni-oneliner 95%.">
+  <img src="assets/benchmark-agentic.svg" width="860" alt="Cada variante como porcentaje del baseline sin skill en LOC, tokens, costo y tiempo (Haiku 4.5). wall-e es el más bajo en cada métrica (LOC 46%, tokens 78%, costo 80%, tiempo 73%); caveman sube por encima del 100% en tokens, costo y tiempo; yagni-oneliner LOC 67%. Seguridad, tier adversarial aparte: baseline, caveman y wall-e 100%, yagni-oneliner 95%.">
 </p>
 
 | vs baseline sin skill | LOC | tokens | costo | tiempo | seguro |
 |---|--:|--:|--:|--:|--:|
-| **ponytail** | **-54%** | **-22%** | **-20%** | **-27%** | **100%** |
+| **wall-e** | **-54%** | **-22%** | **-20%** | **-27%** | **100%** |
 | caveman (control de prosa concisa) | -20% | +7% | +3% | +2% | 100% |
 | prompt "YAGNI + one-liners" | -33% | -14% | -21% | -30% | 95% |
 
-ponytail es la única variante que recorta cada métrica, y la única que se mantiene totalmente segura al hacerlo. El recorte es mayor donde hay una trampa real de sobre-construcción (selector de fechas de 404 a 23 líneas, selector de color de 287 a 23, porque usa un `<input>` nativo en vez de un componente) y casi cero en código que ya es mínimo. Método completo, tablas por tarea y limitaciones: [benchmarks/results/2026-06-18-agentic.md](benchmarks/results/2026-06-18-agentic.md).
+wall-e es la única variante que recorta cada métrica, y la única que se mantiene totalmente segura al hacerlo. El recorte es mayor donde hay una trampa real de sobre-construcción (selector de fechas de 404 a 23 líneas, selector de color de 287 a 23, porque usa un `<input>` nativo en vez de un componente) y casi cero en código que ya es mínimo. Método completo, tablas por tarea y limitaciones: [benchmarks/results/2026-06-18-agentic.md](benchmarks/results/2026-06-18-agentic.md).
 
 <details>
 <summary><strong>Números anteriores de un solo disparo (generación aislada)</strong></summary>
 
-Cinco tareas del día a día, tres modelos, tres variantes (sin skill, [caveman](https://github.com/JuliusBrussee/caveman), ponytail), diez ejecuciones, mediana reportada. Un prompt, una completación, contando las líneas de la respuesta:
+Cinco tareas del día a día, tres modelos, tres variantes (sin skill, [caveman](https://github.com/JuliusBrussee/caveman), wall-e), diez ejecuciones, mediana reportada. Un prompt, una completación, contando las líneas de la respuesta:
 
 <p align="center">
   <img src="assets/benchmark-3model.svg" width="860" alt="Mediana de líneas de código por variante en Haiku, Sonnet y Opus">
@@ -103,7 +103,7 @@ Flojo, no negligente: la validación en límites de confianza, el manejo de pér
 
 ## Instalación
 
-El mayor esfuerzo que ponytail te va a pedir:
+El mayor esfuerzo que wall-e te va a pedir:
 
 Los plugins de Claude Code y Codex ejecutan dos pequeños lifecycle hooks de Node.js, así que `node` debe estar en tu PATH (nota para usuarios de Nix/nvm: debe estar en el PATH del shell no-interactivo). Si no lo está, los skills igualmente funcionan, la activación automática simplemente queda en silencio en vez de lanzar un error en cada prompt.
 
@@ -111,7 +111,7 @@ Los plugins de Claude Code y Codex ejecutan dos pequeños lifecycle hooks de Nod
 
 ```
 /plugin marketplace add DietrichGebert/ponytail
-/plugin install ponytail@ponytail
+/plugin install wall-e@wall-e
 ```
 
 La app de escritorio no tiene el comando `/plugin`. Instálala desde la interfaz: Customize, el + junto a los plugins personales, Create plugin and add marketplace, Add from repository, y luego ingresa la URL del repo (gracias @NiklasDHahn, #98).
@@ -123,7 +123,7 @@ codex plugin marketplace add DietrichGebert/ponytail
 codex
 ```
 
-Abre `/plugins`, selecciona el marketplace de Ponytail e instala Ponytail. Luego abre `/hooks`, revisa y autoriza sus dos lifecycle hooks, y empieza un nuevo hilo.
+Abre `/plugins`, selecciona el marketplace de Wall-E e instala Wall-E. Luego abre `/hooks`, revisa y autoriza sus dos lifecycle hooks, y empieza un nuevo hilo.
 
 Esta misma instalación cubre también la app de escritorio de Codex: reinicia la app después de instalar y detecta el plugin automáticamente.
 
@@ -131,21 +131,21 @@ Esta misma instalación cubre también la app de escritorio de Codex: reinicia l
 
 ```bash
 copilot plugin marketplace add DietrichGebert/ponytail
-copilot plugin install ponytail@ponytail
+copilot plugin install wall-e@wall-e
 ```
 
 En una sesión interactiva de Copilot CLI, usa los equivalentes con slash:
 
 ```
 /plugin marketplace add DietrichGebert/ponytail
-/plugin install ponytail@ponytail
+/plugin install wall-e@wall-e
 ```
 
 Copilot CLI agrupa los comandos del plugin bajo el nombre del plugin. Por ejemplo:
 
 ```text
-/ponytail:ponytail ultra
-/ponytail:ponytail-review
+/wall-e:wall-e ultra
+/wall-e:wall-e-review
 ```
 
 ### Pi agent harness
@@ -165,10 +165,10 @@ Agrega esto a `opencode.json`:
 O ejecútalo desde un checkout (el plugin reutiliza sus `hooks/` y `skills/`):
 
 ```json
-{ "plugin": ["./.opencode/plugins/ponytail.mjs"] }
+{ "plugin": ["./.opencode/plugins/wall-e.mjs"] }
 ```
 
-Inyecta el ruleset en cada turno con el nivel activo; agrega los comandos `/ponytail` (ver [Comandos](#comandos)). OpenCode también carga automáticamente el `AGENTS.md` de este repo, así que las reglas aplican incluso sin el plugin. El plugin agrega los niveles `lite/full/ultra/off`.
+Inyecta el ruleset en cada turno con el nivel activo; agrega los comandos `/wall-e` (ver [Comandos](#comandos)). OpenCode también carga automáticamente el `AGENTS.md` de este repo, así que las reglas aplican incluso sin el plugin. El plugin agrega los niveles `lite/full/ultra/off`.
 
 El path `./` se resuelve contra el `opencode.json` de tu proyecto; para compartir un único checkout entre proyectos, apunta al path absoluto del `.mjs` (encuentra sus `hooks/` y `skills/` relativo a su propio archivo).
 
@@ -178,7 +178,7 @@ El path `./` se resuelve contra el `opencode.json` de tu proyecto; para comparti
 gemini extensions install https://github.com/DietrichGebert/ponytail
 ```
 
-Carga el ruleset como contexto permanente en cada sesión y registra los comandos `/ponytail`; los `skills/` también se incluyen, activados cuando una tarea los necesita.
+Carga el ruleset como contexto permanente en cada sesión y registra los comandos `/wall-e`; los `skills/` también se incluyen, activados cuando una tarea los necesita.
 
 ### Antigravity CLI
 
@@ -188,7 +188,7 @@ Google está renombrando Gemini CLI a Antigravity CLI (el binario `agy`); la mis
 agy plugin install https://github.com/DietrichGebert/ponytail
 ```
 
-Reutiliza el `gemini-extension.json` de este repo. Una diferencia: Antigravity convierte los comandos `/ponytail` en skills, así que los escribes en el chat (por ejemplo `/ponytail-review` como mensaje) en vez de seleccionarlos de un menú slash. Hasta que la migración se complete (alrededor del 18 de junio de 2026), `gemini extensions install` también funciona. Para usarlo como regla permanente, coloca el ruleset en `.agents/rules/`.
+Reutiliza el `gemini-extension.json` de este repo. Una diferencia: Antigravity convierte los comandos `/wall-e` en skills, así que los escribes en el chat (por ejemplo `/wall-e-review` como mensaje) en vez de seleccionarlos de un menú slash. Hasta que la migración se complete (alrededor del 18 de junio de 2026), `gemini extensions install` también funciona. Para usarlo como regla permanente, coloca el ruleset en `.agents/rules/`.
 
 ### CodeWhale
 
@@ -197,22 +197,22 @@ Lee `AGENTS.md` desde la raíz del proyecto, sin configuración. Copia [`AGENTS.
 ### OpenClaw
 
 ```bash
-clawhub install ponytail
+clawhub install wall-e
 ```
 
-Instala ponytail como skill de OpenClaw desde ClawHub; los skills de review, audit, debt y help se instalan igual (`clawhub install ponytail-review`, etc.). OpenClaw lo aplica en tareas de código y también lo expone como comando `/ponytail`. Sin ClawHub, copia [`.openclaw/skills/ponytail`](.openclaw/skills/) a `~/.openclaw/skills/`.
+Instala wall-e como skill de OpenClaw desde ClawHub; los skills de review, audit, debt y help se instalan igual (`clawhub install wall-e-review`, etc.). OpenClaw lo aplica en tareas de código y también lo expone como comando `/wall-e`. Sin ClawHub, copia [`.openclaw/skills/wall-e`](.openclaw/skills/) a `~/.openclaw/skills/`.
 
 Eso fue todo. Él estaría orgulloso. No lo va a decir.
 
-Activo en cada sesión, con un puñado de comandos (ver [Comandos](#comandos)). `/ponytail ultra` existe para cuando el codebase te hizo algo personal. El texto de inicio y de cambio de modo muestra el nivel activo.
+Activo en cada sesión, con un puñado de comandos (ver [Comandos](#comandos)). `/wall-e ultra` existe para cuando el codebase te hizo algo personal. El texto de inicio y de cambio de modo muestra el nivel activo.
 
-Configura el nivel para cada nueva sesión con la variable de entorno `PONYTAIL_DEFAULT_MODE` (`lite`/`full`/`ultra`/`off`), o con un campo `defaultMode` en `~/.config/ponytail/config.json` (`%APPDATA%\ponytail\config.json` en Windows). El default es `full`.
+Configura el nivel para cada nueva sesión con la variable de entorno `WALLE_DEFAULT_MODE` (`lite`/`full`/`ultra`/`off`), o con un campo `defaultMode` en `~/.config/wall-e/config.json` (`%APPDATA%\wall-e\config.json` en Windows). El default es `full`.
 
 Cursor, Windsurf, Cline, GitHub Copilot (editor), Aider, Kiro: copia el archivo de reglas correspondiente de este repo ([`.cursor/rules/`](.cursor/rules/), [`.windsurf/rules/`](.windsurf/rules/), [`.clinerules/`](.clinerules/), [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`AGENTS.md`](AGENTS.md), [`.kiro/steering/`](.kiro/steering/)).
 
-Kiro: copia `.kiro/steering/ponytail.md` a `~/.kiro/steering/` (global) o `.kiro/steering/` en tu proyecto.
+Kiro: copia `.kiro/steering/wall-e.md` a `~/.kiro/steering/` (global) o `.kiro/steering/` en tu proyecto.
 
-Fallback de GitHub Copilot CLI (modo solo instrucciones): lee `AGENTS.md` y `.github/copilot-instructions.md` en un proyecto, o copia las reglas a `~/.copilot/copilot-instructions.md` para ejecutar ponytail en todos tus proyectos. Esta vía mantiene la guía permanente, pero no agrega switches de modo ni hooks.
+Fallback de GitHub Copilot CLI (modo solo instrucciones): lee `AGENTS.md` y `.github/copilot-instructions.md` en un proyecto, o copia las reglas a `~/.copilot/copilot-instructions.md` para ejecutar wall-e en todos tus proyectos. Esta vía mantiene la guía permanente, pero no agrega switches de modo ni hooks.
 
 VS Code con la extensión Codex lee `AGENTS.md`, que este repo incluye, así que funciona desde la raíz del repo sin configuración adicional (`~/.codex/AGENTS.md` hace a Codex global).
 
@@ -222,13 +222,13 @@ Qué archivos corresponden a qué agente: [Portabilidad de agentes](docs/agent-p
 
 | Comando | Qué hace |
 |---------|----------|
-| `/ponytail [lite \| full \| ultra \| off]` | Cambia la intensidad, o apágalo. Sin argumento, reporta el nivel actual. |
-| `/ponytail-review` | Revisa el diff actual en busca de sobre-ingeniería y devuelve una lista de qué eliminar. |
-| `/ponytail-audit` | Audita el repo completo en busca de sobre-ingeniería, no solo el diff. |
-| `/ponytail-debt` | Recolecta los atajos marcados con `ponytail:` que dejaste pendientes en un registro, para que "después" no se convierta en "nunca". |
-| `/ponytail-help` | Referencia rápida de los comandos anteriores. |
+| `/wall-e [lite \| full \| ultra \| off]` | Cambia la intensidad, o apágalo. Sin argumento, reporta el nivel actual. |
+| `/wall-e-review` | Revisa el diff actual en busca de sobre-ingeniería y devuelve una lista de qué eliminar. |
+| `/wall-e-audit` | Audita el repo completo en busca de sobre-ingeniería, no solo el diff. |
+| `/wall-e-debt` | Recolecta los atajos marcados con `wall-e:` que dejaste pendientes en un registro, para que "después" no se convierta en "nunca". |
+| `/wall-e-help` | Referencia rápida de los comandos anteriores. |
 
-Los comandos requieren un host compatible con skills (Claude Code, Codex, OpenCode, Gemini, pi). En Codex son skills; se invocan con `@` (`@ponytail-review`). Los adaptadores de solo instrucciones (Cursor, Windsurf, Cline, Copilot, Kiro, Antigravity) cargan el ruleset permanente sin los comandos.
+Los comandos requieren un host compatible con skills (Claude Code, Codex, OpenCode, Gemini, pi). En Codex son skills; se invocan con `@` (`@wall-e-review`). Los adaptadores de solo instrucciones (Cursor, Windsurf, Cline, Copilot, Kiro, Antigravity) cargan el ruleset permanente sin los comandos.
 
 ## Desarrollo
 
@@ -246,7 +246,7 @@ El benchmark de correctness lanza Python para las verificaciones de email y CSV;
 ## FAQ
 
 **¿Necesita un archivo de configuración?**
-No. Un opcional `~/.config/ponytail/config.json` o la variable `PONYTAIL_DEFAULT_MODE` pueden fijar el nivel default, pero nada es obligatorio.
+No. Un opcional `~/.config/wall-e/config.json` o la variable `WALLE_DEFAULT_MODE` pueden fijar el nivel default, pero nada es obligatorio.
 
 **¿Y si realmente necesito la clase de caché de 120 líneas?**
 No la necesitas. Insiste de todas formas y él la va a construir. Despacio. Correctamente. Mirándote.
@@ -254,7 +254,7 @@ No la necesitas. Insiste de todas formas y él la va a construir. Despacio. Corr
 **¿Escala?**
 El código que nunca escribiste escala infinitamente. Cero bugs, cero CVEs, 100% uptime desde siempre.
 
-**¿Por qué "ponytail"?**
+**¿Por qué "wall-e"?**
 Ya sabes exactamente por qué.
 
 ## Licencia

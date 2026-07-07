@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Version-consistency guard. Ponytail declares its version in six files across
+// Version-consistency guard. Wall-E declares its version in six files across
 // four host ecosystems, and every release bumps all of them by hand.
 //
 // tests/gemini-extension.test.js already checks the four plugin manifests agree
@@ -24,7 +24,7 @@ const VERSION_FILES = [
   '.github/plugin/plugin.json', // Copilot plugin
   'gemini-extension.json',      // Gemini CLI extension
   'package.json',               // pi-package / repo root
-  'ponytail-mcp/package.json',  // MCP server (private, internal-only)
+  'wall-e-mcp/package.json',  // MCP server (private, internal-only)
 ];
 
 function readVersion(relPath) {

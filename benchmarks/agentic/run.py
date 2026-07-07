@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Agentic, multi-file benchmark for ponytail.
+"""Agentic, multi-file benchmark for wall-e.
 
 Runs each (task x arm x model) through a real headless Claude Code session in an isolated
 temp workspace seeded with a starter file, then scores the produced files deterministically
@@ -19,7 +19,7 @@ over-engineering score is a later pass.
       Recompute metrics + aggregate from kept workspaces. No API. Use after changing a
       metric or scorer so you never pay the API twice for a measurement tweak.
 
-ponytail: the claude CLI is the harness (already installed, we run inside it). No SDK
+wall-e: the claude CLI is the harness (already installed, we run inside it). No SDK
 dependency. The CLI's JSON output already carries cost/tokens/duration/permission_denials.
 """
 import argparse, concurrent.futures, datetime, json, os, re, shutil, statistics, subprocess, sys, tempfile
@@ -34,7 +34,7 @@ RUNS_DIR = Path(__file__).resolve().parent / "runs"
 def _skill(rel): return (ROOT / rel).read_text(encoding="utf-8")
 ARMS = {
     "baseline":       lambda: None,
-    "ponytail":       lambda: _skill("skills/ponytail/SKILL.md"),
+    "wall-e":       lambda: _skill("skills/wall-e/SKILL.md"),
     "caveman":        lambda: _skill("benchmarks/arms/caveman-SKILL.md"),
     "yagni":          lambda: "Follow YAGNI principles.",
     "yagni-oneliner": lambda: "Follow YAGNI principles, and prefer one-liner solutions.",
@@ -44,20 +44,21 @@ MODELS = {"haiku": "claude-haiku-4-5-20251001", "sonnet": "claude-sonnet-4-6", "
 # Skills are plugins activated by a SessionStart hook. To test exactly one at a time we exclude the
 # user's globally-enabled plugins (--setting-sources project,local) and load one plugin from its
 # cache dir (--plugin-dir). The smoke test verifies activation by output style.
-PLUGIN_ARMS = ("ponytail", "caveman")          # arms activated via --plugin-dir (vs raw --append prompts)
+PLUGIN_ARMS = ("wall-e", "caveman")          # arms activated via --plugin-dir (vs raw --append prompts)
 PLUGIN_CACHE = Path.home() / ".claude" / "plugins" / "cache"
 
 def _plugin_dir(name):
     """Resolve a plugin's cache dir portably -- hardcoding one machine's absolute path
-    (e.g. C:\\Users\\<you>\\...) made the ponytail/caveman arms unreproducible off that box.
+    (e.g. C:\\Users\\<you>\\...) made the wall-e/caveman arms unreproducible off that box.
     Order: env override -> latest version dir under ~/.claude/plugins/cache -> clear error.
-    Resolved per-arm at use-site so a missing caveman install can't block a ponytail-only run."""
-    env = os.environ.get(f"{name.upper()}_PLUGIN_DIR")
+    Resolved per-arm at use-site so a missing caveman install can't block a wall-e-only run."""
+    env_name = f"{name.upper().replace('-', '_')}_PLUGIN_DIR"
+    env = os.environ.get(env_name)
     if env: return env
     base = PLUGIN_CACHE / name / name
     versions = sorted(p for p in base.glob("*") if p.is_dir()) if base.exists() else []
     if not versions:
-        sys.exit(f"{name} plugin dir not found under {base}; install the plugin or set {name.upper()}_PLUGIN_DIR")
+        sys.exit(f"{name} plugin dir not found under {base}; install the plugin or set {env_name}")
     return str(versions[-1])                    # latest version dir; not pinned to one machine's hash
 
 CELL_TIMEOUT = 300  # seconds per cell; a hung agent is force-killed (process tree) so the pool can't freeze
@@ -65,7 +66,7 @@ CELL_TIMEOUT = 300  # seconds per cell; a hung agent is force-killed (process tr
 # Added to every arm's system prompt, identically. We measure code PRODUCTION, not execution: agents
 # write the implementation and stop. No live verification -- earlier attempts had agents open a browser,
 # hit the template's login wall, and retry, inflating tokens/time with flailing instead of code. Writing
-# tests is still explicitly allowed, so ponytail's "leave a runnable check" discipline is not suppressed.
+# tests is still explicitly allowed, so wall-e's "leave a runnable check" discipline is not suppressed.
 NO_RUN = ("Write the implementation (include tests if you normally would for a change like this). "
           "Do not run a dev server, install dependencies, run a database, or open a browser to verify -- "
           "just write the code and stop. Only the code you write is measured, not its execution.")
@@ -95,7 +96,7 @@ def _selfcheck_split(p: Path):
     """Split a produced .py file at the first TOP-LEVEL self-check marker (a `__main__` guard or a
     demo()/selfcheck() function) through end of file. Returns (src_total, src_code, sc_total,
     sc_code), counted like _count. On a surgical task that delivers ONE function, an in-file self-
-    check is the runnable check ponytail's rule asks for -- a positive signal, not source bloat --
+    check is the runnable check wall-e's rule asks for -- a positive signal, not source bloat --
     so it is split off here and counted as test LOC instead of penalising the arm that wrote it."""
     try: lines = p.read_text(encoding="utf-8", errors="ignore").splitlines()
     except Exception: return 0, 0, 0, 0
@@ -121,7 +122,7 @@ def code_stats(workdir: Path, selfcheck_as_test: bool = False):
     total_loc counts every non-blank line including comments and docstrings -- the bloat a vibe
     baseline actually produces. src_loc is code-only, for the breakdown. Tests tracked separately,
     never as bloat. selfcheck_as_test (surgical tasks): an in-file __main__/demo() self-check is
-    reclassified from source to test, so following ponytail's 'leave a runnable check' rule is not
+    reclassified from source to test, so following wall-e's 'leave a runnable check' rule is not
     counted as code bloat against it."""
     fixture = set()                                   # files that were seeded, not delivered
     fm = workdir / "_fixture_files.json"
@@ -205,15 +206,15 @@ def _selftest_plugin_dir():
     """Plugin-dir resolution must be portable: env override wins, and a missing install
     fails loudly (sys.exit) instead of silently passing a non-existent path to --plugin-dir."""
     fails = 0
-    sentinel = "/tmp/ponytail-selftest-plugin-dir"
-    os.environ["PONYTAIL_PLUGIN_DIR"] = sentinel
+    sentinel = "/tmp/wall-e-selftest-plugin-dir"
+    os.environ["WALL_E_PLUGIN_DIR"] = sentinel
     try:
-        ok_env = _plugin_dir("ponytail") == sentinel
+        ok_env = _plugin_dir("wall-e") == sentinel
     finally:
-        del os.environ["PONYTAIL_PLUGIN_DIR"]
+        del os.environ["WALL_E_PLUGIN_DIR"]
     print(f"{'ok ' if ok_env else 'XX '} plugin_dir   env  override honored")
     fails += 0 if ok_env else 1
-    missing = "ponytail-does-not-exist-xyz"          # no env, no cache entry -> must sys.exit
+    missing = "wall-e-does-not-exist-xyz"          # no env, no cache entry -> must sys.exit
     try:
         _plugin_dir(missing); ok_miss = False        # reached only if it did NOT exit -> broken
     except SystemExit:

@@ -1,11 +1,11 @@
 {
-  "name": "ponytail",
+  "name": "wall-e",
   "interface": {
-    "displayName": "Ponytail"
+    "displayName": "Wall-E"
   },
   "plugins": [
     {
-      "name": "ponytail",
+      "name": "wall-e",
       "source": {
         "source": "url",
         "url": "https://github.com/DietrichGebert/ponytail.git",

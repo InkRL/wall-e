@@ -1,8 +1,8 @@
 {
-  "name": "@dietrichgebert/ponytail",
+  "name": "@vittoriogaravelli/wall-e",
   "version": "4.8.3",
   "description": "Lazy senior dev mode for AI agents. The best code is the code you never wrote.",
-  "keywords": ["opencode-plugin", "opencode", "ponytail", "pi-package", "pi", "skills"],
+  "keywords": ["opencode-plugin", "opencode", "wall-e", "pi-package", "pi", "skills"],
   "license": "MIT",
   "author": {
     "name": "Dietrich Gebert",
@@ -16,10 +16,10 @@
   "bugs": {
     "url": "https://github.com/DietrichGebert/ponytail/issues"
   },
-  "main": "./.opencode/plugins/ponytail.mjs",
+  "main": "./.opencode/plugins/wall-e.mjs",
   "exports": {
-    ".": "./.opencode/plugins/ponytail.mjs",
-    "./plugin": "./.opencode/plugins/ponytail.mjs"
+    ".": "./.opencode/plugins/wall-e.mjs",
+    "./plugin": "./.opencode/plugins/wall-e.mjs"
   },
   "files": [
     "AGENTS.md",
