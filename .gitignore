@@ -24,3 +24,6 @@ wall-e-*.gif
 
 # agentic benchmark workspaces (agent output, kept locally for inspection)
 benchmarks/agentic/runs/
+
+# macOS Finder metadata
+.DS_Store

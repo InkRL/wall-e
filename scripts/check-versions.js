@@ -1,14 +1,10 @@
 #!/usr/bin/env node
-// Version-consistency guard. Wall-E declares its version in six files across
-// four host ecosystems, and every release bumps all of them by hand.
+// Version-consistency guard. Wall-E declares its version in four files across
+// host ecosystems, and every release bumps all of them by hand.
 //
-// tests/gemini-extension.test.js already checks the four plugin manifests agree
-// with each other, but that can't catch the failure mode that shipped in v4.8.0:
-// every manifest stayed stale at 4.7.0 *together* while the release moved on, so
-// they "agreed" and the test passed (#260, #262). It also ignores the two
-// package.json files. This check closes both gaps:
-//   1. every version-bearing file must share one pinned X.Y.Z version, and
-//   2. on a release-tag CI run, that shared version must equal the tag.
+// This check closes a drift gap: every version-bearing file must share one
+// pinned X.Y.Z version, and on a release-tag CI run that shared version must
+// equal the tag.
 
 const fs = require('fs');
 const path = require('path');
@@ -19,12 +15,10 @@ const PINNED_SEMVER = /^\d+\.\d+\.\d+$/;
 // Every file that declares the project version, and who reads it. Add new host
 // manifests here so a future ecosystem can't drift unnoticed.
 const VERSION_FILES = [
-  '.claude-plugin/plugin.json', // Claude Code plugin — what users install
+  '.claude-plugin/plugin.json', // Claude Code plugin
   '.codex-plugin/plugin.json',  // Codex plugin
-  '.github/plugin/plugin.json', // Copilot plugin
-  'gemini-extension.json',      // Gemini CLI extension
-  'package.json',               // pi-package / repo root
-  'wall-e-mcp/package.json',  // MCP server (private, internal-only)
+  '.github/plugin/plugin.json', // GitHub Copilot CLI plugin
+  'package.json',               // repo root
 ];
 
 function readVersion(relPath) {

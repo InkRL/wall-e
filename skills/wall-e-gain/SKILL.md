@@ -2,8 +2,8 @@
 name: wall-e-gain
 description: >
   Show wall-e's measured impact as a compact scoreboard: less code, less
-  cost, more speed, from the benchmark medians. One-shot display, not a
-  persistent mode, and not a per-repo number. Trigger: /wall-e-gain,
+  cost, more speed, from the agentic benchmark medians. One-shot display, not a
+  per-repo number. Trigger: /wall-e-gain,
   "wall-e gain", "what does wall-e save", "show wall-e impact",
   "wall-e scoreboard".
 ---
@@ -13,24 +13,27 @@ description: >
 Display this scoreboard when invoked. One-shot: do NOT change mode, write flag
 files, or persist anything.
 
-The figures are the published benchmark medians (5 everyday tasks: email
-validator, debounce, CSV sum, countdown timer, rate limiter; three models:
-Haiku, Sonnet, Opus). They are measured, not computed from the current repo.
-Source: `benchmarks/` and the README.
+The figures are the published agentic benchmark medians (12 feature tasks on a
+real FastAPI + React repo, Haiku 4.5, n=4). They are measured, not computed from
+the current repo. Source: `README.md` and `assets/benchmark-agentic.svg`.
 
 ## Scoreboard
 
-Render plain ASCII bars. The bar length shows the measured range; the label
+Render plain ASCII bars. The bar length shows the measured percentage; the label
 carries the exact figure:
 
 ```
-  wall-e gain                     benchmark median · 5 tasks · 3 models
+  wall-e gain       agentic benchmark · 12 tasks · Haiku 4.5
 
   Lines of code   no-skill  ████████████████████  100%
-                  wall-e  ██▌·················    6–20%   ▼ 80–94%
+                  wall-e    █████████▌··········   46%   ▼ 54%
+  Tokens          no-skill  ████████████████████  100%
+                  wall-e    ███████████████▌····   78%   ▼ 22%
   Cost            no-skill  ████████████████████  100%
-                  wall-e  █████▌··············   23–53%  ▼ 47–77%
-  Speed           wall-e  ▸ 3–6× faster
+                  wall-e    ████████████████····   80%   ▼ 20%
+  Time            no-skill  ████████████████████  100%
+                  wall-e    █████████████▌······   73%   ▼ 27%
+  Safety          wall-e    ████████████████████  100%
 
   This repo:  /wall-e-debt  (shortcuts you deferred)
               /wall-e-audit (what's still cuttable)
