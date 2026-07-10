@@ -13,7 +13,6 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/stars/InkRL/wall-e?style=flat-square&color=111111&label=stars" alt="Stars">
-  <img src="https://img.shields.io/github/v/release/InkRL/wall-e?style=flat-square&color=111111&label=release" alt="Release">
   <img src="https://img.shields.io/badge/license-MIT-111111?style=flat-square" alt="MIT license">
 </p>
 
@@ -21,9 +20,9 @@
   <strong>~54% less code &middot; ~20% cheaper &middot; ~27% faster &middot; 100% safe</strong>
 </p>
 
-You know him. Long ponytail. Oval glasses. Has been at the company longer than the version control. You show him fifty lines; he looks at them, says nothing, and replaces them with one.
+This is a fork of [ponytail](https://github.com/DietrichGebert/ponytail), the original work of Dietrich Gebert. 
 
-Wall-E puts him inside your AI agent.
+Wall-E is a senior dev inside your AI agent.
 
 
 ## How it works
@@ -69,27 +68,6 @@ codex
 ```
 
 Open `/plugins`, select the Wall-E marketplace, and install Wall-E. Then open `/hooks`, review and trust its two lifecycle hooks, and start a new thread.
-
-### GitHub Copilot CLI
-
-```bash
-copilot plugin marketplace add InkRL/wall-e
-copilot plugin install wall-e@wall-e
-```
-
-In an interactive Copilot CLI session, use the slash equivalents:
-
-```
-/plugin marketplace add InkRL/wall-e
-/plugin install wall-e@wall-e
-```
-
-Copilot CLI namespaces plugin commands by plugin name. For example:
-
-```text
-/wall-e:wall-e ultra
-/wall-e:wall-e-review
-```
 
 ### Devin CLI
 

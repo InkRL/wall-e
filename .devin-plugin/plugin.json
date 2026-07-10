@@ -1,0 +1,13 @@
+{
+  "name": "wall-e",
+  "version": "4.8.3",
+  "description": "Lazy senior dev mode. Forces the simplest, shortest solution that actually works: YAGNI, stdlib first, no unrequested abstractions.",
+  "author": {
+    "name": "Vittorio Garavelli",
+    "url": "https://github.com/vittoriogaravelli"
+  },
+  "homepage": "https://github.com/InkRL/wall-e",
+  "repository": "https://github.com/InkRL/wall-e.git",
+  "license": "MIT",
+  "keywords": ["wall-e", "yagni", "minimalism", "code-review", "productivity", "skills"]
+}

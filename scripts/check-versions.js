@@ -15,10 +15,10 @@ const PINNED_SEMVER = /^\d+\.\d+\.\d+$/;
 // Every file that declares the project version, and who reads it. Add new host
 // manifests here so a future ecosystem can't drift unnoticed.
 const VERSION_FILES = [
-  '.claude-plugin/plugin.json', // Claude Code plugin
-  '.codex-plugin/plugin.json',  // Codex plugin
-  '.github/plugin/plugin.json', // GitHub Copilot CLI plugin
-  'package.json',               // repo root
+  '.claude-plugin/plugin.json',  // Claude Code plugin
+  '.codex-plugin/plugin.json',   // Codex plugin
+  '.devin-plugin/plugin.json',   // Devin CLI plugin
+  'package.json',                // repo root
 ];
 
 function readVersion(relPath) {
