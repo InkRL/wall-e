@@ -25,32 +25,6 @@ You know him. Long ponytail. Oval glasses. Has been at the company longer than t
 
 Wall-E puts him inside your AI agent.
 
-## Before / after
-
-You ask for a date picker. Your agent installs flatpickr, writes a wrapper component, adds a stylesheet, and starts a discussion about timezones.
-
-With wall-e:
-
-```html
-<!-- wall-e: browser has one -->
-<input type="date">
-```
-
-More platform-native shortcuts in [docs/platform-native.md](docs/platform-native.md).
-
-## Numbers
-
-Measured on real Claude Code sessions editing a real FastAPI + React repo. The biggest wins are where an agent over-builds (e.g., a date picker → `<input type="date">`); near zero where the code is already minimal.
-
-<p align="center">
-  <img src="assets/benchmark-agentic.svg" width="860" alt="Each arm as a percent of the no-skill baseline across LOC, tokens, cost and time (Haiku 4.5). wall-e is lowest on every metric (LOC 46%, tokens 78%, cost 80%, time 73%); caveman rises above 100% on tokens, cost and time; yagni-oneliner LOC 67%. Safety, separate adversarial tier: baseline, caveman and wall-e 100%, yagni-oneliner 95%.">
-</p>
-
-| vs no-skill baseline | LOC | tokens | cost | time | safe |
-|---|--:|--:|--:|--:|--:|
-| **wall-e** | **-54%** | **-22%** | **-20%** | **-27%** | **100%** |
-| caveman (terse-prose control) | -20% | +7% | +3% | +2% | 100% |
-| "YAGNI + one-liners" prompt | -33% | -14% | -21% | -30% | 95% |
 
 ## How it works
 
